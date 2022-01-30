@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  frontend:
+    build: .
+    container_name: frontend
+    stdin_open: true
+    tty: true
+    command: npm start
+    volumes:
+      - ./src/:/app/src/
+      - /app/node_modules
+    ports:
+      - "3000:3000"
