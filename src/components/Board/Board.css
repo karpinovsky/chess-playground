@@ -1,0 +1,14 @@
+.board {
+  height: 648px;
+  width: 648px;
+  min-height: 455px;
+  display: flex;
+}
+
+.board__image {
+  background-image: url("/public/board.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 100%;
+  height: 100%;
+}
