@@ -1,14 +1,21 @@
 .board {
-  height: 648px;
-  width: 648px;
-  min-height: 455px;
-  display: flex;
+  border: 1px solid #999;
+  border-spacing: unset;
 }
 
-.board__image {
-  background-image: url("/public/board.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  width: 100%;
-  height: 100%;
+.board tr:nth-child(odd) td:nth-child(even) {
+  background: #999;
+}
+
+.board tr:nth-child(even) td:nth-child(odd) {
+  background: #999;
+}
+
+.board td {
+  width: 80px;
+  height: 80px;
+  font-size: 50px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
 }
