@@ -1,28 +1,29 @@
 import "./Board.css";
 
-import Row from "../Row/Row";
+import BoardRow from "../BoardRow/BoardRow";
 
 interface IProps {
-  cells: Map<string, string | null>
-  pieces: Map<string, {description: string, htmlCode: string}>
+  cells: Map<string, {pieceID: string | null, active: boolean}>
+  pieces: Map<string, {description: string, codePoint: string}>
   onCellClick: (cellID: string) => void
+  isBoardFlipped: boolean
 }
 
-const Board:React.FC<IProps> = ({cells, pieces, onCellClick}: IProps) => {
+const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped}: IProps) => {
   return (
-    <table className="board">
-      <tbody>
-        {
-          [...Array(8)].map((_, i) => {
-            let rowStart:number = 8 * i;
-            let rowEnd:number = rowStart +8;
-            let row = new Map(Array.from(cells).slice(rowStart, rowEnd))
+    <div className="board">
+      {
+        [...Array(8)].map((_, i, {length}) => {
+          let rowStart:number = 8 * i;
+          let rowEnd:number = rowStart +8;
+          let row = new Map(Array.from(cells).slice(rowStart, rowEnd))
+          let rowNum = isBoardFlipped ? i + 1 : 8 - i
+          let showCellNavigation = i + 1 === length ? true : false
 
-            return <Row key={8 - i} cells={row} pieces={pieces} onCellClick={onCellClick} />
-          })
-        }
-      </tbody>
-    </table>
+          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} pieces={pieces} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} />
+        })
+      }
+    </div>
   )
 }
 

@@ -1,21 +1,16 @@
 .board {
+  display: flex;
+  width: 640px;
+  height: 640px;
+  flex-wrap: wrap;
   border: 1px solid #999;
   border-spacing: unset;
 }
 
-.board tr:nth-child(odd) td:nth-child(even) {
-  background: #999;
+.board div:nth-child(odd) div:nth-child(even) {
+  background: #d3d3d3;
 }
 
-.board tr:nth-child(even) td:nth-child(odd) {
-  background: #999;
-}
-
-.board td {
-  width: 80px;
-  height: 80px;
-  font-size: 50px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
+.board div:nth-child(even) div:nth-child(odd) {
+  background: #d3d3d3;
 }

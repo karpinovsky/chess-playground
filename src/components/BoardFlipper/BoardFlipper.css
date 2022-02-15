@@ -1,0 +1,15 @@
+.board-flipper {
+  /* height: 700px;; */
+  display: flex;
+  justify-content: center;
+  align-items: center;;
+}
+
+.board-flipper__img {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  background-repeat: none;
+  filter: invert(67%) sepia(13%) saturate(10%) hue-rotate(71deg) brightness(89%) contrast(86%);
+  background-image: url("/public/images/flip-board.svg");
+}

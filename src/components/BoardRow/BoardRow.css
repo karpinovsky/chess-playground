@@ -1,0 +1,10 @@
+.board-row {
+  position: relative;
+}
+
+.board-row__navigation {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 2;
+}
