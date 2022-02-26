@@ -3,11 +3,7 @@
   width: 398px;
   border: 1px solid #999;
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-}
-
-.control-panel__current_player {
-  width: inherit;
-  font-size: 35px;
-  text-align: center;
+  flex-wrap: wrap;
 }
