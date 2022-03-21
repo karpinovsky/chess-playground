@@ -10,14 +10,16 @@ interface IProps {
     toCell: {
       ID: string,
       pieceID: string | null
-    }
+    },
+    active: boolean
   }[]
   pieces: Map<string, {description: string, codePoint: string}>
+  onMoveHistory: (moveIndex: number) => void
 }
 
 const pairSize:number = 2
 
-const MovesHistory:React.FC<IProps> = ({cells, moves, pieces}: IProps) => {
+const MovesHistory:React.FC<IProps> = ({cells, moves, pieces, onMoveHistory}: IProps) => {
   let movesInPairs = () => {
     let a = []
 
@@ -28,7 +30,7 @@ const MovesHistory:React.FC<IProps> = ({cells, moves, pieces}: IProps) => {
     return a
   }
 
-  let printMove = ({fromCell, toCell}: {fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}}):string => {
+  let printMove = ({fromCell, toCell, active}: {fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}, active: boolean}):string => {
     let fromPiece = pieces.get(fromCell.pieceID as string)
     if (fromCell.pieceID?.startsWith("WP") || fromCell.pieceID?.startsWith("BP")) {
       if (toCell.pieceID === null) {
@@ -43,8 +45,6 @@ const MovesHistory:React.FC<IProps> = ({cells, moves, pieces}: IProps) => {
     } else {
       return `${fromPiece?.codePoint}x${toCell.ID.toLowerCase()}`
     }
-
-    return ""
   }
 
   return (
@@ -54,8 +54,8 @@ const MovesHistory:React.FC<IProps> = ({cells, moves, pieces}: IProps) => {
             movesInPairs().map(([firstMove, secondMove], i) => {
               return (
                 <li key={i} className="control-panel__moves-history__list__item">
-                  <span className="control-panel__moves-history__list__item-value">{printMove(firstMove)}</span>
-                  { secondMove !== undefined ? <span className="control-panel__moves-history__list__item-value">{printMove(secondMove)}</span> : null }
+                  <span className={`control-panel__moves-history__list__item-value${firstMove.active ? ' control-panel__moves-history__list__item-value--active' : ''}`} onClick={() => onMoveHistory(i * 2)}>{printMove(firstMove)}</span>
+                  { secondMove !== undefined ? <span className={`control-panel__moves-history__list__item-value${secondMove.active ? ' control-panel__moves-history__list__item-value--active' : ''}`} onClick={() => onMoveHistory(i * 2 + 1)}>{printMove(secondMove)}</span> : null }
                 </li>
               )
             })

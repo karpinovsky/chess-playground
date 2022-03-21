@@ -32,6 +32,12 @@
 .control-panel__moves-history__list__item-value {
   display: inline-block;
   width: 30px;
-  font-size: 20px;
+  font-size: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.control-panel__moves-history__list__item-value--active {
   font-weight: bold;
+  text-decoration: underline;
 }

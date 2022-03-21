@@ -6,3 +6,7 @@
   align-items: center;
   gap: 30px;
 }
+
+.cursor-default {
+  cursor: default !important;
+}

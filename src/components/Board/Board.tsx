@@ -7,9 +7,13 @@ interface IProps {
   pieces: Map<string, {description: string, codePoint: string}>
   onCellClick: (cellID: string) => void
   isBoardFlipped: boolean
+  rememberedCell: {
+    ID: string
+    pieceID: string | null
+  } | null
 }
 
-const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped}: IProps) => {
+const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped, rememberedCell}: IProps) => {
   return (
     <div className="board">
       {
@@ -20,7 +24,7 @@ const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped}: IP
           let rowNum = isBoardFlipped ? i + 1 : 8 - i
           let showCellNavigation = i + 1 === length ? true : false
 
-          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} pieces={pieces} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} />
+          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} pieces={pieces} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} rememberedCell={rememberedCell} />
         })
       }
     </div>
