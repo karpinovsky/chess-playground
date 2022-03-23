@@ -4,7 +4,6 @@ import BoardRow from "../BoardRow/BoardRow";
 
 interface IProps {
   cells: Map<string, {pieceID: string | null, active: boolean}>
-  pieces: Map<string, {description: string, codePoint: string}>
   onCellClick: (cellID: string) => void
   isBoardFlipped: boolean
   rememberedCell: {
@@ -13,7 +12,7 @@ interface IProps {
   } | null
 }
 
-const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped, rememberedCell}: IProps) => {
+const Board:React.FC<IProps> = ({cells, onCellClick, isBoardFlipped, rememberedCell}: IProps) => {
   return (
     <div className="board">
       {
@@ -24,7 +23,7 @@ const Board:React.FC<IProps> = ({cells, pieces, onCellClick, isBoardFlipped, rem
           let rowNum = isBoardFlipped ? i + 1 : 8 - i
           let showCellNavigation = i + 1 === length ? true : false
 
-          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} pieces={pieces} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} rememberedCell={rememberedCell} />
+          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} rememberedCell={rememberedCell} />
         })
       }
     </div>

@@ -1,11 +1,11 @@
 import "./BoardRow.css"
 
+import { PIECES } from "../../store/constants"
 import BoardCell from "../BoardCell/BoardCell"
 
 interface IProps {
   rowNum: number
   cells: Map<string, {pieceID: string | null, active: boolean}>
-  pieces: Map<string, {description: string, codePoint: string}>
   onCellClick: (cellID: string) => void
   showCellNavigation: boolean
   isBoardFlipped: boolean
@@ -15,7 +15,7 @@ interface IProps {
   } | null
 }
 
-const BoardRow:React.FC<IProps> = ({rowNum, cells, pieces, onCellClick, showCellNavigation, isBoardFlipped, rememberedCell}: IProps) => {
+const BoardRow:React.FC<IProps> = ({rowNum, cells, onCellClick, showCellNavigation, isBoardFlipped, rememberedCell}: IProps) => {
   const columnNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
   return (
@@ -23,7 +23,7 @@ const BoardRow:React.FC<IProps> = ({rowNum, cells, pieces, onCellClick, showCell
       <span className="board-row__navigation">{rowNum}</span>
       {
         Array.from(cells).map(([ID, {pieceID, active}], i, {length}) => {
-          let piece = pieceID === null ? null : pieces.get(pieceID)
+          let piece = pieceID === null ? null : PIECES.get(pieceID)
           let disabled = (piece === null || piece === undefined) && rememberedCell === null ? true : false
           let codePoint = piece === null || piece === undefined ? '' : piece.codePoint
           let columnName = isBoardFlipped ? columnNames[7 - i] : columnNames[i]

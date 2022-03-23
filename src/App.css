@@ -10,3 +10,11 @@
 .cursor-default {
   cursor: default !important;
 }
+
+.btn {
+  height: 40px;
+  border: 1px solid #999;
+  background-color: #d3d3d3;
+  border-radius: 5px;
+  cursor: pointer;
+}

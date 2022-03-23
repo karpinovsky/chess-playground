@@ -9,11 +9,3 @@ html, body, #root {
 body {
   margin: 0;
 }
-
-.btn {
-  height: 40px;
-  border: 1px solid #999;
-  background-color: #d3d3d3;
-  border-radius: 5px;
-  cursor: pointer;
-}

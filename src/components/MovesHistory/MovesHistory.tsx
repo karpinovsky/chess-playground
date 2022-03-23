@@ -1,5 +1,7 @@
 import "./MovesHistory.css"
 
+import { PIECES } from "../../store/constants"
+
 interface IProps {
   cells: Map<string, {pieceID: string | null, active: boolean}>
   moves: {
@@ -13,13 +15,12 @@ interface IProps {
     },
     active: boolean
   }[]
-  pieces: Map<string, {description: string, codePoint: string}>
   onMoveHistory: (moveIndex: number) => void
 }
 
 const pairSize:number = 2
 
-const MovesHistory:React.FC<IProps> = ({cells, moves, pieces, onMoveHistory}: IProps) => {
+const MovesHistory:React.FC<IProps> = ({cells, moves, onMoveHistory}: IProps) => {
   let movesInPairs = () => {
     let a = []
 
@@ -31,7 +32,7 @@ const MovesHistory:React.FC<IProps> = ({cells, moves, pieces, onMoveHistory}: IP
   }
 
   let printMove = ({fromCell, toCell, active}: {fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}, active: boolean}):string => {
-    let fromPiece = pieces.get(fromCell.pieceID as string)
+    let fromPiece = PIECES.get(fromCell.pieceID as string)
     if (fromCell.pieceID?.startsWith("WP") || fromCell.pieceID?.startsWith("BP")) {
       if (toCell.pieceID === null) {
         return toCell.ID.toLowerCase()
