@@ -7,51 +7,58 @@ import Board from './components/Board/Board'
 import ControlPanel from './components/ControlPanel/ControlPanel'
 
 import { INITIAL_CELLS } from "./store/constants"
+import { Cell } from "./store/interfaces"
 
 function App() {
   const [cells, setCells] = useState(INITIAL_CELLS)
-  const [rememberedCell, setRememberedCell] = useState<{ID: string, pieceID: string | null} | null>(null)
+  const [rememberedCell, setRememberedCell] = useState<Cell | null>(null)
   const [isBoardFlipped, setIsBoardFlipped] = useState<boolean>(false)
   const [isWhitePlayerCurrent, setIsWhitePlayerCurrent] = useState<boolean>(true)
   const [moves, setMoves] = useState<{fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}, active: boolean}[]>([])
 
-  const onCellClick = (cellID: string):void => {
-    let currentCell = {ID: cellID, pieceID: cells.get(cellID)?.pieceID as string | null}
+  const onCellClick = (clickedCell: Cell):void => {
+    if (rememberedCell === null && clickedCell.meta.movable === false) return
 
-    if (rememberedCell === null || rememberedCell === undefined) {
-      if (currentCell.pieceID === null) {
-        return
-      }
+    if (rememberedCell === null) {
+      setRememberedCell(clickedCell)
+      setCells(
+        new Map<string, {pieceID: string, meta: {active: boolean, striped: boolean, movable: boolean}}>(
+          Array.from(cells).map(([ID, cell]) => {
+            if (ID === clickedCell.ID) {
+              return [ID, {...cell, meta: { ...cell.meta, active: true }}]
+            }
+            return [ID, {...cell, meta: { ...cell.meta, active: false }}]
+          })
+        )
+      )
 
-      setRememberedCell(currentCell)
       return
     }
 
     let newCells =
-      new Map<string, {pieceID: string | null, active: boolean}>(
-        Array.from(cells).map(([ID, {pieceID, active}]) => {
-          if (ID === cellID) {
-            return [ID, {pieceID: rememberedCell.pieceID, active: true}]
+      new Map<string, {pieceID: string, meta: {active: boolean, striped: boolean, movable: boolean}}>(
+        Array.from(cells).map(([ID, {pieceID, meta}]) => {
+          if (ID === clickedCell.ID) {
+            return [ID, {pieceID: rememberedCell.pieceID as string, meta: { ...meta, active: true }}]
           }
           if (ID === rememberedCell.ID) {
-            return [ID, {pieceID: null, active: true}]
+            return [ID, {pieceID: '', meta: { ...meta, active: true }}]
           }
-          return [ID, {pieceID: pieceID, active: false}]
+          return [ID, {pieceID: pieceID, meta: { ...meta, active: false }}]
         })
       )
     setCells(new Map(Array.from(newCells)))
-    // setIsBoardFlipped(!isBoardFlipped)
     setRememberedCell(null)
     setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
 
-    calculateMoves({fromCell: rememberedCell, toCell: currentCell, active: true})
+    // calculateMoves({fromCell: rememberedCell, toCell: cell, active: true})
   }
 
   const flipBoard = ():void => {
-    setCells(
-      new Map(Array.from(cells).reverse())
-    )
-    setIsBoardFlipped(!isBoardFlipped)
+    // setCells(
+      // new Map(Array.from(cells).reverse())
+    // )
+    // setIsBoardFlipped(!isBoardFlipped)
   }
 
   const resetGame = () => {
@@ -63,132 +70,132 @@ function App() {
   }
 
   const moveBack = () => {
-    let currentActiveMoveIndex = moves.findIndex(move => move.active === true)
+    // let currentActiveMoveIndex = moves.findIndex(move => move.active === true)
 
-    if (currentActiveMoveIndex === -1) return
+    // if (currentActiveMoveIndex === -1) return
 
-    setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
+    // setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
 
-    if (currentActiveMoveIndex === 0) {
-      setCells(INITIAL_CELLS)
-      setMoves(
-        moves.map(move => {
-          return {...move, active: false}
-        })
-      )
-      return
-    }
+    // if (currentActiveMoveIndex === 0) {
+      // setCells(INITIAL_CELLS)
+      // setMoves(
+        // moves.map(move => {
+          // return {...move, active: false}
+        // })
+      // )
+      // return
+    // }
 
-    let newMoves =
-      moves.map((move, i) => {
-        if (i === currentActiveMoveIndex - 1) {
-          return {...move, active: true}
-        }
-        if (i === currentActiveMoveIndex) {
-          return {...move, active: false}
-        }
-        return move
-      })
-    setMoves(newMoves)
+    // let newMoves =
+      // moves.map((move, i) => {
+        // if (i === currentActiveMoveIndex - 1) {
+          // return {...move, active: true}
+        // }
+        // if (i === currentActiveMoveIndex) {
+          // return {...move, active: false}
+        // }
+        // return move
+      // })
+    // setMoves(newMoves)
 
-    recalculateBoardState(moves.slice(0, currentActiveMoveIndex))
+    // recalculateBoardState(moves.slice(0, currentActiveMoveIndex))
   }
 
   const moveForward = () => {
-    let currentActiveMoveIndex = moves.findIndex(move => move.active === true)
+    // let currentActiveMoveIndex = moves.findIndex(move => move.active === true)
 
-    if (currentActiveMoveIndex === moves.length - 1) {
-      return
-    }
+    // if (currentActiveMoveIndex === moves.length - 1) {
+      // return
+    // }
 
-    setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
+    // setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
 
-    let newMoves =
-      moves.map((move, i) => {
-        if (i === currentActiveMoveIndex + 1) {
-          return {...move, active: true}
-        }
-        if (i === currentActiveMoveIndex) {
-          return {...move, active: false}
-        }
-        return move
-      })
-    setMoves(newMoves)
+    // let newMoves =
+      // moves.map((move, i) => {
+        // if (i === currentActiveMoveIndex + 1) {
+          // return {...move, active: true}
+        // }
+        // if (i === currentActiveMoveIndex) {
+          // return {...move, active: false}
+        // }
+        // return move
+      // })
+    // setMoves(newMoves)
 
-    recalculateBoardState(moves.slice(0, currentActiveMoveIndex + 2))
+    // recalculateBoardState(moves.slice(0, currentActiveMoveIndex + 2))
   }
 
   const recalculateBoardState = (moves: {fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}, active: boolean}[]) => {
-    let newCells = new Map(INITIAL_CELLS)
+    // let newCells = new Map(INITIAL_CELLS)
 
-    moves.map((move, i, {length}) => {
-      let isActive = i === length - 1 ? true : false
+    // moves.map((move, i, {length}) => {
+      // let isActive = i === length - 1 ? true : false
 
-      newCells.set(move.fromCell.ID, {pieceID: null, active: isActive})
-      newCells.set(move.toCell.ID, {pieceID: move.fromCell.pieceID, active: isActive})
-    })
+      // newCells.set(move.fromCell.ID, {pieceID: null, active: isActive})
+      // newCells.set(move.toCell.ID, {pieceID: move.fromCell.pieceID, active: isActive})
+    // })
 
-    setCells(newCells)
+    // setCells(newCells)
   }
 
   const calculateMoves = (newMove: {fromCell: {ID: string, pieceID: string | null}, toCell: {ID: string, pieceID: string | null}, active: boolean}) => {
-    let similarMoveIndex = moves.findIndex(move => move.fromCell.ID === newMove.fromCell.ID && move.fromCell.pieceID === newMove.fromCell.pieceID && move.toCell.ID === newMove.toCell.ID && move.toCell.pieceID === newMove.toCell.pieceID)
-    let activeMoveIndex = moves.findIndex(move => move.active === true)
+    // let similarMoveIndex = moves.findIndex(move => move.fromCell.ID === newMove.fromCell.ID && move.fromCell.pieceID === newMove.fromCell.pieceID && move.toCell.ID === newMove.toCell.ID && move.toCell.pieceID === newMove.toCell.pieceID)
+    // let activeMoveIndex = moves.findIndex(move => move.active === true)
 
-    if (similarMoveIndex !== -1 && similarMoveIndex === activeMoveIndex + 1) {
-      setMoves(
-        moves.map((move, i) => {
-          if (i === similarMoveIndex) {
-            return {...move, active: true}
-          }
-          return {...move, active: false}
-        })
-      )
-    } else {
-      setMoves(
-        moves.slice(0, activeMoveIndex + 1).map((move) => {
-          return {...move, active: false}
-        }).concat(
-          [newMove]
-        )
-      )
-    }
+    // if (similarMoveIndex !== -1 && similarMoveIndex === activeMoveIndex + 1) {
+      // setMoves(
+        // moves.map((move, i) => {
+          // if (i === similarMoveIndex) {
+            // return {...move, active: true}
+          // }
+          // return {...move, active: false}
+        // })
+      // )
+    // } else {
+      // setMoves(
+        // moves.slice(0, activeMoveIndex + 1).map((move) => {
+          // return {...move, active: false}
+        // }).concat(
+          // [newMove]
+        // )
+      // )
+    // }
   }
 
   const toMove = (moveIndex: number):void => {
-    let activeMoveIndex = moves.findIndex(move => move.active === true)
+    // let activeMoveIndex = moves.findIndex(move => move.active === true)
 
-    if (activeMoveIndex === moveIndex) return
+    // if (activeMoveIndex === moveIndex) return
 
-    setMoves(
-      moves.map((move, i) => {
-        // if (i !== 0) setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
+    // setMoves(
+      // moves.map((move, i) => {
+        // // if (i !== 0) setIsWhitePlayerCurrent(!isWhitePlayerCurrent)
 
-        if (i === moveIndex) {
-          return {...move, active: true}
-        }
-        return {...move, active: false}
-      })
-    )
+        // if (i === moveIndex) {
+          // return {...move, active: true}
+        // }
+        // return {...move, active: false}
+      // })
+    // )
 
-    let newMoves = moves.slice(0, moveIndex + 1)
+    // let newMoves = moves.slice(0, moveIndex + 1)
 
-    let isWhite:boolean = true
-    for (let index in newMoves) {
-      isWhite = !isWhite
-    }
-    setIsWhitePlayerCurrent(isWhite)
+    // let isWhite:boolean = true
+    // for (let index in newMoves) {
+      // isWhite = !isWhite
+    // }
+    // setIsWhitePlayerCurrent(isWhite)
 
-    recalculateBoardState(newMoves)
+    // recalculateBoardState(newMoves)
   }
 
   return (
     <div className="App">
       <BoardFlipper flipBoard={flipBoard} />
       <Board cells={cells} onCellClick={onCellClick} isBoardFlipped={isBoardFlipped} rememberedCell={rememberedCell} />
-      <ControlPanel cells={cells} isWhitePlayerCurrent={isWhitePlayerCurrent} moves={moves} onResetGame={resetGame} onMoveBack={moveBack} onMoveForward={moveForward} onMoveHistory={toMove} />
     </div>
   );
+  // <ControlPanel cells={cells} isWhitePlayerCurrent={isWhitePlayerCurrent} moves={moves} onResetGame={resetGame} onMoveBack={moveBack} onMoveForward={moveForward} onMoveHistory={toMove} />
 }
 
 export default App;

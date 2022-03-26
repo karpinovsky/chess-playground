@@ -2,9 +2,12 @@ import "./Board.css";
 
 import BoardRow from "../BoardRow/BoardRow";
 
+import { PIECES } from "../../store/constants"
+import { Cell } from "../../store/interfaces"
+
 interface IProps {
-  cells: Map<string, {pieceID: string | null, active: boolean}>
-  onCellClick: (cellID: string) => void
+  cells: Map<string, {pieceID: string, meta: { active: boolean, striped: boolean, movable: boolean }}>
+  onCellClick: (cell: Cell) => void
   isBoardFlipped: boolean
   rememberedCell: {
     ID: string
@@ -16,14 +19,18 @@ const Board:React.FC<IProps> = ({cells, onCellClick, isBoardFlipped, rememberedC
   return (
     <div className="board">
       {
-        [...Array(8)].map((_, i, {length}) => {
-          let rowStart:number = 8 * i;
-          let rowEnd:number = rowStart +8;
-          let row = new Map(Array.from(cells).slice(rowStart, rowEnd))
-          let rowNum = isBoardFlipped ? i + 1 : 8 - i
-          let showCellNavigation = i + 1 === length ? true : false
+        Array.from(cells).map(([ID, cell], i, {length}) => {
+          let classNames = 'board__cell'
 
-          return <BoardRow key={rowNum} rowNum={rowNum} cells={row} onCellClick={onCellClick} showCellNavigation={showCellNavigation} isBoardFlipped={isBoardFlipped} rememberedCell={rememberedCell} />
+          if (cell.meta.striped) classNames += ' board__cell--striped'
+          if (cell.meta.active)  classNames += ' board__cell--active'
+          if (cell.meta.movable) classNames += ' board__cell--movable'
+
+          return (
+            <div key={i} className={classNames} onClick={() => onCellClick({ID: ID, ...cell})}>
+              {PIECES.get(cell.pieceID)?.codePoint}
+            </div>
+          )
         })
       }
     </div>

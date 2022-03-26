@@ -1,14 +1,10 @@
 .App {
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  min-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;
-}
-
-.cursor-default {
-  cursor: default !important;
 }
 
 .btn {
