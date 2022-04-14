@@ -7,8 +7,6 @@ services:
     tty: true
     command: npm start
     volumes:
-      - ./src/:/app/src/
-      - ./public:/app/public/
-      - /app/node_modules
+      - .:/app
     ports:
       - "3000:3000"
