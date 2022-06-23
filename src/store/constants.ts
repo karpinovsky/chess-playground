@@ -1,5 +1,16 @@
 import { Cell } from "./interfaces"
 
+export const BOARD_COLUMNS = new Map<number, string>([
+  [0, 'a'],
+  [1, 'b'],
+  [2, 'c'],
+  [3, 'd'],
+  [4, 'e'],
+  [5, 'f'],
+  [6, 'g'],
+  [7, 'h']
+])
+
 export const PIECES = new Map<string, {description: string, codePoint: string}>([
   ['', { description: 'Empty cell', codePoint: '' }],
 

@@ -7,11 +7,11 @@
   border-spacing: unset;
 }
 
-.board div:nth-child(even) div:nth-child(odd) {
+.board .board__row:nth-child(even) .board__cell:nth-child(odd) {
   background: #d3d3d3;
 }
 
-.board div:nth-child(odd) div:nth-child(even) {
+.board .board__row:nth-child(odd) .board__cell:nth-child(even) {
   background: #d3d3d3;
 }
 
@@ -20,11 +20,15 @@
   position: relative;
   width: 80px;
   height: 80px;
-  font-size: 60px;
+  font-size: 70px;
   text-align: center;
   vertical-align: middle;
   cursor: default;
   user-select: none;
+}
+
+.board__cell--figure {
+  line-height: 70px;
 }
 
 .board__cell--active {
@@ -35,3 +39,21 @@
   cursor: pointer !important;
 }
 
+.board__row {
+  position: relative;
+}
+
+.board__row--navigation {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 1;
+  font-size: 15px;
+}
+
+.board__cell--navigation {
+  position: absolute;
+  bottom: 4px;
+  right: 7px;
+  font-size: 20px;
+}

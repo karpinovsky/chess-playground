@@ -2,7 +2,7 @@ import "./ChessBoard.css";
 
 import * as R from 'ramda'
 
-import { INITIAL_CELLS, PIECES } from "../../store/constants"
+import { INITIAL_CELLS, PIECES, BOARD_COLUMNS } from "../../store/constants"
 import { Cell } from "../../store/interfaces"
 import { Player } from "../../store/enums"
 
@@ -16,8 +16,6 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onCellClick}: 
   const board: () => Cell[] = () => currentPlayer() === Player.White ? cells() : R.reverse(cells())
 
   const cells: () => Cell[] = () => R.map(R.mergeAll, R.values(groupedCellsFromMoves()))
-
-  const isCurrentPlayerBack: () => boolean = () => currentPlayer() === Player.White
 
   const currentPlayer: () => Player = () => R.modulo(closedCurrentMovesCounter() / 2, 2) === 0 ? Player.White : Player.Black
 
@@ -39,27 +37,35 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onCellClick}: 
 
   const isCellActive: (cell: Cell) => boolean = (cell) => R.any(R.propEq('ID', cell.ID), R.or(R.last(movesInPairs()), []))
 
+  const boardRowNumber: (row: number) => number = (row) => currentPlayer() === Player.White ? R.subtract(8, row) : R.inc(row)
+
+  const boardColumnName: (column: number) => string = (column) => BOARD_COLUMNS.get(currentPlayer() === Player.White ? column : R.subtract(8, R.inc(column)))!
+
   return (
     <div className="board">
       {
         R.splitEvery(8, board()).map((row: Cell[], i: number) => {
           return (
-            <div key={i} className="board__row">{
-              row.map((cell: Cell, j: number) => {
-                let classNames = 'board__cell board__cell--movable'
+            <div key={i} className="board__row">
+              <div className="board__row--navigation">{boardRowNumber(i)}</div>
+              {
+                row.map((cell: Cell, j: number) => {
+                  let classNames = 'board__cell board__cell--movable'
 
-                if (isCellActive(cell)) classNames += ' board__cell--active'
+                  if (isCellActive(cell)) classNames += ' board__cell--active'
 
-                let chessFigure = PIECES.get(cell.pieceID)?.codePoint
+                  let chessFigure = PIECES.get(cell.pieceID)?.codePoint
 
-                return (
-                  <div key={j} className={classNames} onClick={() => onCellClick(cell)}>
-                    {chessFigure}
-                  </div>
-                )
-              })
+                  return (
+                    <div key={j} className={classNames} onClick={() => onCellClick(cell)}>
+                      { i === 7 ? <span className="board__cell--navigation">{boardColumnName(j)}</span> : null }
+                      <span className='board__cell--figure'>{chessFigure}</span>
+                    </div>
+                  )
+                })
 
-            }</div>
+              }
+            </div>
           )
         })
       }
