@@ -1,13 +1,13 @@
 import "./ControlPanel.css"
 
-import { Cell } from "../../store/interfaces"
+import { Square } from "../../store/interfaces"
 import { Player } from "../../store/enums"
 import { PIECES } from "../../store/constants"
 
 import * as R from 'ramda'
 
 interface IProps {
-  moves: Cell[]
+  moves: Square[]
   currentMovesCounter: number
   onNewGame: () => void
   onMoveBack: () => void
@@ -24,13 +24,13 @@ const ControlPanel:React.FC<IProps> = ({moves, currentMovesCounter, onNewGame, o
 
   const handleNewGameClick: () => void = () => window.confirm("Are you sure?") ? onNewGame() : null
 
-  const printMove = (source: Cell, target: Cell, moveIndex: number):React.ReactNode => {
+  const printMove = (source: Square, target: Square, moveIndex: number):React.ReactNode => {
     if (R.isNil(target)) return
 
     return <span className={classNames(moveIndex)} onClick={() => onMoveClick(moveIndex)}>{moveText(source, target)}</span>
   }
 
-  const moveText: (source: Cell, target: Cell) => string =
+  const moveText: (source: Square, target: Square) => string =
     (source, target) => {
       let fromPiece = PIECES.get(source.pieceID)
 

@@ -1,4 +1,4 @@
-import { Cell } from "./interfaces"
+import { Square } from "./interfaces"
 
 export const BOARD_COLUMNS = new Map<number, string>([
   [0, 'a'],
@@ -12,7 +12,7 @@ export const BOARD_COLUMNS = new Map<number, string>([
 ])
 
 export const PIECES = new Map<string, {description: string, codePoint: string}>([
-  ['', { description: 'Empty cell', codePoint: '' }],
+  ['', { description: 'Empty square', codePoint: '' }],
 
   ['WR1', { description: 'White Rook 1', codePoint: '\u2656' }],
   ['WN1', { description: 'White Knight 1', codePoint: '\u2658' }],
@@ -51,7 +51,7 @@ export const PIECES = new Map<string, {description: string, codePoint: string}>(
   ['BR2', { description: 'Black Rook 2', codePoint: '\u265C' }],
 ])
 
-export const INITIAL_CELLS:Cell[] = [
+export const INITIAL_SQUARES:Square[] = [
   {ID: 'A8', pieceID: 'BR1'},
   {ID: 'B8', pieceID: 'BN1'},
   {ID: 'C8', pieceID: 'BB1'},

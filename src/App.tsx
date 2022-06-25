@@ -7,22 +7,22 @@ import './App.css'
 import ChessBoard from './components/ChessBoard/ChessBoard'
 import ControlPanel from './components/ControlPanel/ControlPanel'
 
-import { Cell } from "./store/interfaces"
+import { Square } from "./store/interfaces"
 
 function App() {
-  const [moves, setMoves] = useState<Cell[]>([])
+  const [moves, setMoves] = useState<Square[]>([])
   const [currentMovesCounter, setCurrentMovesCounter] = useState<number>(0)
 
-  const onCellClick: (cell: Cell) => void =
-    (cell) => {
+  const onSquareClick: (square: Square) => void =
+    (square) => {
       setCurrentMovesCounter(R.inc(currentMovesCounter))
 
-      if (R.not(R.equals(cell, nextCell()))) {
-        setMoves(R.append(cell, R.take(currentMovesCounter, moves)))
+      if (R.not(R.equals(square, nextSquare()))) {
+        setMoves(R.append(square, R.take(currentMovesCounter, moves)))
       }
     }
 
-  const nextCell: () => Cell | undefined = () => R.last(R.take(R.inc(currentMovesCounter), moves))
+  const nextSquare: () => Square | undefined = () => R.last(R.take(R.inc(currentMovesCounter), moves))
 
   const newGame: () => void =
     () => {
@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-      <ChessBoard moves={moves} currentMovesCounter={currentMovesCounter} onCellClick={onCellClick} />
+      <ChessBoard moves={moves} currentMovesCounter={currentMovesCounter} onSquareClick={onSquareClick} />
       <ControlPanel moves={moves} currentMovesCounter={currentMovesCounter} onNewGame={newGame} onMoveBack={moveBack} onMoveForward={moveForward} onMoveClick={updateCurrentMovesCounter} />
     </div>
   );

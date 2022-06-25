@@ -1,4 +1,4 @@
-export interface Cell {
+export interface Square {
   ID: string
   pieceID: string
 }

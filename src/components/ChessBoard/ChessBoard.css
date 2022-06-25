@@ -7,15 +7,15 @@
   border-spacing: unset;
 }
 
-.board .board__row:nth-child(even) .board__cell:nth-child(odd) {
+.board .board__row:nth-child(even) .board__square:nth-child(odd) {
   background: #d3d3d3;
 }
 
-.board .board__row:nth-child(odd) .board__cell:nth-child(even) {
+.board .board__row:nth-child(odd) .board__square:nth-child(even) {
   background: #d3d3d3;
 }
 
-.board__cell {
+.board__square {
   display: inline-block;
   position: relative;
   width: 80px;
@@ -27,15 +27,15 @@
   user-select: none;
 }
 
-.board__cell--figure {
+.board__square--figure {
   line-height: 70px;
 }
 
-.board__cell--active {
+.board__square--active {
   background: rgb(164, 184, 196) !important;
 }
 
-.board__cell--movable {
+.board__square--movable {
   cursor: pointer !important;
 }
 
@@ -51,7 +51,7 @@
   font-size: 15px;
 }
 
-.board__cell--navigation {
+.board__square--navigation {
   position: absolute;
   bottom: 4px;
   right: 7px;

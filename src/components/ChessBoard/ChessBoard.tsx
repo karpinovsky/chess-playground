@@ -2,40 +2,40 @@ import "./ChessBoard.css";
 
 import * as R from 'ramda'
 
-import { INITIAL_CELLS, PIECES, BOARD_COLUMNS } from "../../store/constants"
-import { Cell } from "../../store/interfaces"
+import { INITIAL_SQUARES, PIECES, BOARD_COLUMNS } from "../../store/constants"
+import { Square } from "../../store/interfaces"
 import { Player } from "../../store/enums"
 
 interface IProps {
-  moves: Cell[]
+  moves: Square[]
   currentMovesCounter: number
-  onCellClick: (cell: Cell) => void
+  onSquareClick: (square: Square) => void
 }
 
-const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onCellClick}: IProps) => {
-  const board: () => Cell[] = () => currentPlayer() === Player.White ? cells() : R.reverse(cells())
+const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onSquareClick}: IProps) => {
+  const board: () => Square[] = () => currentPlayer() === Player.White ? squares() : R.reverse(squares())
 
-  const cells: () => Cell[] = () => R.map(R.mergeAll, R.values(groupedCellsFromMoves()))
+  const squares: () => Square[] = () => R.map(R.mergeAll, R.values(groupedSquaresFromMoves()))
 
   const currentPlayer: () => Player = () => R.modulo(closedCurrentMovesCounter() / 2, 2) === 0 ? Player.White : Player.Black
 
-  const groupedCellsFromMoves: () => (Record<string, Cell[]>) = () => R.groupBy((cell: Cell) => cell.ID)(R.concat(INITIAL_CELLS, cellsFromMoves()) as Cell[])
+  const groupedSquaresFromMoves: () => (Record<string, Square[]>) = () => R.groupBy((square: Square) => square.ID)(R.concat(INITIAL_SQUARES, squaresFromMoves()) as Square[])
 
   const closedCurrentMovesCounter: () => number = () => R.subtract(currentMovesCounter, R.modulo(currentMovesCounter, 2))
 
-  const movesInPairs: () => Cell[][] = () => R.splitEvery(2, R.take(currentMovesCounter, moves))
+  const movesInPairs: () => Square[][] = () => R.splitEvery(2, R.take(currentMovesCounter, moves))
 
-  const closedMovesInPairs: () => Cell[][] = () => R.splitEvery(2, R.take(closedCurrentMovesCounter(), moves))
+  const closedMovesInPairs: () => Square[][] = () => R.splitEvery(2, R.take(closedCurrentMovesCounter(), moves))
 
-  const cellsFromMoves: () => Cell[] = () => R.flatten(R.map(computeMoves, closedMovesInPairs()))
+  const squaresFromMoves: () => Square[] = () => R.flatten(R.map(computeMoves, closedMovesInPairs()))
 
-  const computeMoves: (moves: Cell[]) => Cell[] = (moves) => R.pipe(movePieceToNewCell, dropPieceFromPrevCell)(moves)
+  const computeMoves: (moves: Square[]) => Square[] = (moves) => R.pipe(movePieceToNewSquare, dropPieceFromPrevSquare)(moves)
 
-  const movePieceToNewCell: (move: Cell[]) => Cell[] = (move) => R.update(1, R.assoc('pieceID', move[0].pieceID, move[1]))(move)
+  const movePieceToNewSquare: (move: Square[]) => Square[] = (move) => R.update(1, R.assoc('pieceID', move[0].pieceID, move[1]))(move)
 
-  const dropPieceFromPrevCell: (move: Cell[]) => Cell[] = (move) => R.update(0, R.assoc('pieceID', '', move[0]))(move)
+  const dropPieceFromPrevSquare: (move: Square[]) => Square[] = (move) => R.update(0, R.assoc('pieceID', '', move[0]))(move)
 
-  const isCellActive: (cell: Cell) => boolean = (cell) => R.any(R.propEq('ID', cell.ID), R.or(R.last(movesInPairs()), []))
+  const isSquareActive: (square: Square) => boolean = (square) => R.any(R.propEq('ID', square.ID), R.or(R.last(movesInPairs()), []))
 
   const boardRowNumber: (row: number) => number = (row) => currentPlayer() === Player.White ? R.subtract(8, row) : R.inc(row)
 
@@ -44,22 +44,22 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onCellClick}: 
   return (
     <div className="board">
       {
-        R.splitEvery(8, board()).map((row: Cell[], i: number) => {
+        R.splitEvery(8, board()).map((row: Square[], i: number) => {
           return (
             <div key={i} className="board__row">
               <div className="board__row--navigation">{boardRowNumber(i)}</div>
               {
-                row.map((cell: Cell, j: number) => {
-                  let classNames = 'board__cell board__cell--movable'
+                row.map((square: Square, j: number) => {
+                  let classNames = 'board__square board__square--movable'
 
-                  if (isCellActive(cell)) classNames += ' board__cell--active'
+                  if (isSquareActive(square)) classNames += ' board__square--active'
 
-                  let chessFigure = PIECES.get(cell.pieceID)?.codePoint
+                  let chessFigure = PIECES.get(square.pieceID)?.codePoint
 
                   return (
-                    <div key={j} className={classNames} onClick={() => onCellClick(cell)}>
-                      { i === 7 ? <span className="board__cell--navigation">{boardColumnName(j)}</span> : null }
-                      <span className='board__cell--figure'>{chessFigure}</span>
+                    <div key={j} className={classNames} onClick={() => onSquareClick(square)}>
+                      { i === 7 ? <span className="board__square--navigation">{boardColumnName(j)}</span> : null }
+                      <span className='board__square--figure'>{chessFigure}</span>
                     </div>
                   )
                 })
