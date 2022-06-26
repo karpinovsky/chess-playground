@@ -15,9 +15,9 @@ interface IProps {
 const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onSquareClick}: IProps) => {
   const board: () => Square[] = () => currentPlayer() === Player.White ? squares() : R.reverse(squares())
 
-  const squares: () => Square[] = () => R.map(R.mergeAll, R.values(groupedSquaresFromMoves()))
-
   const currentPlayer: () => Player = () => R.modulo(closedCurrentMovesCounter() / 2, 2) === 0 ? Player.White : Player.Black
+
+  const squares: () => Square[] = () => R.map(R.mergeAll, R.values(groupedSquaresFromMoves()))
 
   const groupedSquaresFromMoves: () => (Record<string, Square[]>) = () => R.groupBy((square: Square) => square.ID)(R.concat(INITIAL_SQUARES, squaresFromMoves()) as Square[])
 
@@ -37,19 +37,19 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onSquareClick}
 
   const isSquareActive: (square: Square) => boolean = (square) => R.any(R.propEq('ID', square.ID), R.or(R.last(movesInPairs()), []))
 
-  const boardRowNumber: (row: number) => number = (row) => currentPlayer() === Player.White ? R.subtract(8, row) : R.inc(row)
+  const calcRowNumber: (rowNumber: number) => number = (rowNumber) => currentPlayer() === Player.White ? R.subtract(8, rowNumber) : R.inc(rowNumber)
 
-  const boardColumnName: (column: number) => string = (column) => BOARD_COLUMNS.get(currentPlayer() === Player.White ? column : R.subtract(8, R.inc(column)))!
+  const calcColumnName: (columnNumber: number) => string = (columnNumber) => BOARD_COLUMNS.get(currentPlayer() === Player.White ? columnNumber : R.subtract(8, R.inc(columnNumber)))!
 
   return (
     <div className="board">
       {
-        R.splitEvery(8, board()).map((row: Square[], i: number) => {
+        R.splitEvery(8, board()).map((row: Square[], rowNumber: number) => {
           return (
-            <div key={i} className="board__row">
-              <div className="board__row--navigation">{boardRowNumber(i)}</div>
+            <div key={rowNumber} className="board__row">
+              <div className="board__row--navigation">{calcRowNumber(rowNumber)}</div>
               {
-                row.map((square: Square, j: number) => {
+                row.map((square: Square, columnNumber: number) => {
                   let classNames = 'board__square board__square--movable'
 
                   if (isSquareActive(square)) classNames += ' board__square--active'
@@ -57,8 +57,8 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onSquareClick}
                   let chessFigure = PIECES.get(square.pieceID)?.codePoint
 
                   return (
-                    <div key={j} className={classNames} onClick={() => onSquareClick(square)}>
-                      { i === 7 ? <span className="board__square--navigation">{boardColumnName(j)}</span> : null }
+                    <div key={columnNumber} className={classNames} onClick={() => onSquareClick(square)}>
+                      { rowNumber === 7 ? <span className="board__square--navigation">{calcColumnName(columnNumber)}</span> : null }
                       <span className='board__square--figure'>{chessFigure}</span>
                     </div>
                   )
