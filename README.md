@@ -18,4 +18,5 @@ docker-compose up
 ```sh
 docker-compose run --rm frontend /bin/sh
 npm install <libraryName>
+npm install --save @types/<libaryName> # if necessary
 ```
