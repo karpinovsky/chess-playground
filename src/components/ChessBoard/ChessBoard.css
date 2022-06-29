@@ -7,14 +7,6 @@
   border-spacing: unset;
 }
 
-.board .board__row:nth-child(even) .board__square:nth-child(odd) {
-  background: #d3d3d3;
-}
-
-.board .board__row:nth-child(odd) .board__square:nth-child(even) {
-  background: #d3d3d3;
-}
-
 .board__square {
   display: inline-block;
   position: relative;
@@ -37,18 +29,6 @@
 
 .board__square--movable {
   cursor: pointer !important;
-}
-
-.board__row {
-  position: relative;
-}
-
-.board__row--navigation {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 1;
-  font-size: 15px;
 }
 
 .board__square--navigation {

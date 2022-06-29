@@ -1,0 +1,19 @@
+.board .board__rank:nth-child(even) .board__square:nth-child(odd) {
+  background: #d3d3d3;
+}
+
+.board .board__rank:nth-child(odd) .board__square:nth-child(even) {
+  background: #d3d3d3;
+}
+
+.board__rank {
+  position: relative;
+}
+
+.board__rank--navigation {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 1;
+  font-size: 15px;
+}

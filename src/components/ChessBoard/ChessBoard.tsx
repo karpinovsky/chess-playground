@@ -2,6 +2,8 @@ import "./ChessBoard.css";
 
 import * as R from 'ramda'
 
+import ChessBoardRank from '../ChessBoardRank/ChessBoardRank'
+
 import { INITIAL_SQUARES, PIECES, BOARD_COLUMNS } from "../../store/constants"
 import { Square } from "../../store/interfaces"
 import { Player } from "../../store/enums"
@@ -44,28 +46,9 @@ const ChessBoard:React.FC<IProps> = ({moves, currentMovesCounter, onSquareClick}
   return (
     <div className="board">
       {
-        R.splitEvery(8, board()).map((row: Square[], rowNumber: number) => {
+        R.splitEvery(8, board()).map((squares: Square[], rowNumber: number) => {
           return (
-            <div key={rowNumber} className="board__row">
-              <div className="board__row--navigation">{calcRowNumber(rowNumber)}</div>
-              {
-                row.map((square: Square, columnNumber: number) => {
-                  let classNames = 'board__square board__square--movable'
-
-                  if (isSquareActive(square)) classNames += ' board__square--active'
-
-                  let chessFigure = PIECES.get(square.pieceID)?.codePoint
-
-                  return (
-                    <div key={columnNumber} className={classNames} onClick={() => onSquareClick(square)}>
-                      { rowNumber === 7 ? <span className="board__square--navigation">{calcColumnName(columnNumber)}</span> : null }
-                      <span className='board__square--figure'>{chessFigure}</span>
-                    </div>
-                  )
-                })
-
-              }
-            </div>
+            <ChessBoardRank key={rowNumber} squares={squares} onSquareClick={onSquareClick} moves={moves} currentMovesCounter={currentMovesCounter} rowNumber={calcRowNumber(rowNumber)} />
           )
         })
       }
