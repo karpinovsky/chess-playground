@@ -6,6 +6,8 @@ import { INITIAL_SQUARES, PIECES, BOARD_COLUMNS } from "../../store/constants"
 import { Square } from "../../store/interfaces"
 import { Player } from "../../store/enums"
 
+import ChessBoardSquare from '../ChessBoardSquare/ChessBoardSquare'
+
 interface IProps {
   moves: Square[]
   currentMovesCounter: number
@@ -30,17 +32,17 @@ const ChessBoardRank:React.FC<IProps> = ({moves, currentMovesCounter, onSquareCl
       <div className="board__rank--navigation">{rowNumber}</div>
       {
         squares.map((square: Square, columnNumber: number) => {
-          let classNames = 'board__square board__square--movable'
+          let columnName = calcColumnName(columnNumber)
+          let navigation
 
-          if (isSquareActive(square)) classNames += ' board__square--active'
-
-          let chessFigure = PIECES.get(square.pieceID)?.codePoint
+          if (currentPlayer() === Player.White) {
+            navigation = rowNumber === 1 ? columnName : ''
+          } else {
+            navigation = rowNumber === 8 ? columnName : ''
+          }
 
           return (
-            <div key={columnNumber} className={classNames} onClick={() => onSquareClick(square)}>
-              { rowNumber === 1 ? <span className="board__square--navigation">{calcColumnName(columnNumber)}</span> : null }
-              <span className='board__square--figure'>{chessFigure}</span>
-            </div>
+            <ChessBoardSquare key={columnName} square={square} isActive={isSquareActive(square)} navigation={navigation} onSquareClick={onSquareClick} />
           )
         })
 
